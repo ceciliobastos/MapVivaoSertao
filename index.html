@@ -1,0 +1,89 @@
+<html>
+    <head>
+		<meta charset=utf-8 />
+        <title>Viva o Sertão</title>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+        <link rel="stylesheet" href="css/leaflet.css" />
+        <script src="js/leaflet.js"></script>
+
+        <link rel="stylesheet" href="css/MarkerCluster.css" />
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+        <script src="js/leaflet.markercluster.js"></script>
+
+        <script src="js/jquery-2.2.4.min.js"></script>
+        <link rel="stylesheet" href="css/mystyles.css" />
+		
+		<script src='https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js' charset = 'utf-8 ' ></script >
+		<link href='https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css' rel='stylesheet' />
+		
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[VERSION]/dist/L.Control.Locate.min.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[VERSION]/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+	</head>
+    
+	<body>
+        <div id="map"></div>
+        <script>
+				// inicialize o mapa com opções de camadas
+				var osmStreets = '<a href="https://www.mapbox.com/maps/streets/">OsmStreet</a>',
+					osmSatellite = '<a href="https://www.mapbox.com/maps/satellite/">OsmSatellite</a>';
+        
+				var osmstUrl = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={inserir-token}',
+					osmstAttrib = '&copy; ' + osmStreets + ' Contributors',
+					osmsatUrl = 'https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={inserir-token}',
+					osmsatAttrib = '&copy; '+osmStreets+' Contributors & '+osmSatellite;
+                    
+				var osmMapStreets = L.tileLayer(osmstUrl, {attribution: osmstAttrib}),
+					osmMapSatellite = L.tileLayer(osmsatUrl, {attribution: osmsatAttrib});
+
+				var map = L.map('map', {
+			      layers: [osmMapStreets]
+				})
+				.setView([-9.4, -40.4], 9);
+
+				var baseLayers = {
+				"Streets": osmMapStreets,
+				"Satellite": osmMapSatellite
+				};
+
+				L.control.layers(baseLayers).addTo(map);
+				
+				// controle de localização
+				L.control.locate({
+					strings: {
+						title: "Mostrar localização atual"
+					}
+				})
+				.addTo(map);
+
+            // carregar o GeoJSON
+            $.getJSON("route.geojson", function(data) {
+                
+                var markers = L.geoJson(data, {
+                                  pointToLayer: function(feature, latlng) {
+                                      var marker = L.marker(latlng);
+                                      marker.bindPopup(feature.properties.name);
+                                      return marker;
+                                  }
+                              });
+                // adicionar marcadores aos clusters
+                var clusters = L.markerClusterGroup();
+                clusters.addLayer(markers);
+                map.addLayer(clusters);
+            });
+
+            var popup = L.popup();
+
+            function onMapClick(e) {
+                popup
+                    .setLatLng(e.latlng)
+                    .setContent(e.latlng.toString())
+                    .openOn(map);
+            }
+
+            map.on('click', onMapClick);
+
+        </script>
+    </body>
+</html>
