@@ -1,4 +1,5 @@
 # MapVivaoSertao
+Desenvolvimento de georreferenciamento com Leaflet e Mapbox para o site Viva o Sertão <https://vivaosertao.com.br/>.
 
 O georreferenciamento inclui o processamento de rotas para os pontos turísticos e culturais visitados pelo projeto Viva o Sertão. Trata-se de um portal de informações sobre o sertão nordestino, especialmente sobre a região do Vale do São Francisco, tendo como ponto central a cidade de Petrolina em Pernambuco. Ele foi projetado para reunir informações, orientações e fotografias sobre os inúmeros lugares de interesse turístico e cultural, facilitando o planejamento de roteiros.
 
