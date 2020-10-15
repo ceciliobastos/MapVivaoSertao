@@ -29,13 +29,13 @@
 				var osmStreets = '<a href="https://www.mapbox.com/maps/streets/">OsmStreet</a>',
 					osmSatellite = '<a href="https://www.mapbox.com/maps/satellite/">OsmSatellite</a>';
         
-				var osmstUrl = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={inserir-token}',
+				var osmstUrl = 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={inserir-token}',
 					osmstAttrib = '&copy; ' + osmStreets + ' Contributors',
 					osmsatUrl = 'https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={inserir-token}',
 					osmsatAttrib = '&copy; '+osmStreets+' Contributors & '+osmSatellite;
                     
-				var osmMapStreets = L.tileLayer(osmstUrl, {attribution: osmstAttrib}),
-					osmMapSatellite = L.tileLayer(osmsatUrl, {attribution: osmsatAttrib});
+				var osmMapStreets = L.tileLayer(osmstUrl, {attribution: osmstAttrib, tileSize: 512, maxZoom: 18, zoomOffset: -1}),
+					osmMapSatellite = L.tileLayer(osmsatUrl, {attribution: osmsatAttrib, tileSize: 512, maxZoom: 18, zoomOffset: -1});
 
 				var map = L.map('map', {
 			      layers: [osmMapStreets]
